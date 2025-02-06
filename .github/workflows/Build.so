@@ -1,0 +1,18 @@
+name: "Build"
+on:
+  pull_request:
+  push:
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout
+         uses: actions/checkout@main
+
+       - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y patchelf
+
+       - name: Build
+         run: patchelf --add-needed ./libmaterialbinloader-arm64.so ./libminecraftpe.so
