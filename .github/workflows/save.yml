@@ -1,0 +1,39 @@
+name: Save Release File to Repository
+
+on:
+  # 触发条件，例如可以设置为定期运行或手动触发
+  schedule:
+    - cron: "0 0 * * *"  # 每天午夜运行一次
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  save-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download File from Release
+        run: |
+          wget -O libminecraftpe.so https://github.com/MaoPou/build-minecraft-so/releases/download/1.21.51/libminecraftpe.so
+
+      - name: Check if File Exists
+        id: check-file
+        run: |
+          if [ -f libminecraftpe.so ]; then
+            echo "file-exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "file-exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and Push File
+        if: steps.check-file.outputs.file-exists == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add libminecraftpe.so
+          git commit -m "Save libminecraftpe.so from release"
+          git push origin HEAD
