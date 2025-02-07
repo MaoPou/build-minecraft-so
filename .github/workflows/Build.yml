@@ -26,4 +26,4 @@ jobs:
           file ./libminecraftpe.so
 
       - name: Compile
-        run: patchelf --add-needed libmaterialbinloader-arm64.so libminecraftpe.so
+        run: patchelf --add-needed ./libmaterialbinloader-arm64.so ./libminecraftpe.so
