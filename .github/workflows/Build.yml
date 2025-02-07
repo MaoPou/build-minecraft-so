@@ -21,9 +21,7 @@ jobs:
           sudo apt-get install -y patchelf
 
       - name: Install minecraft so file
-        run: |
-          curl -O https://github.com/MaoPou/build-minecraft-so/releases/download/1.21.51/libminecraftpe.so
-          file ./libminecraftpe.so
+        run: cd ./
 
       - name: Compile
         run: patchelf --add-needed ./libmaterialbinloader-arm64.so ./libminecraftpe.so
